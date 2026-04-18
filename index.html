@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para Meu amor ❤️</title>
+    <style>
+        /* Ajustes para telas menores e Safari */
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Começa do topo para não cortar no iPhone 7 */
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+        .container { 
+            width: 100%; 
+            max-width: 320px; /* Largura ideal para a tela do iPhone 7 */
+        }
+        .foto-casal {
+            width: 100%;
+            height: 250px; /* Altura fixa para garantir que a legenda apareça logo abaixo */
+            object-fit: cover; /* Não distorce a foto */
+            border-radius: 15px;
+            border: 3px solid #ff4d4d;
+            margin-top: 10px;
+        }
+        #display-legenda {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ff4d4d;
+            min-height: 50px;
+            margin: 15px 0;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        audio {
+            width: 100%;
+            height: 40px;
+            border-radius: 30px;
+            /* No Safari/iOS o player já é branco/cinza por padrão, 
+               removi o invert para evitar cores estranhas no iPhone */
+        }
+        .heart { font-size: 1.5rem; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="heart">❤️</div>
+        
+        <img src="foto.jpg" alt="Nossa Foto" class="foto-casal">
+        
+        <div id="display-legenda">Aperte o play...</div>
+
+        <audio id="player" controls playsinline>
+            <source src="musica.mp3" type="audio/mpeg">
+            <track id="track" src="legendas.vtt" kind="captions" srclang="pt" label="Português" default>
+        </audio>
+    </div>
+
+    <script>
+        const audio = document.getElementById('player');
+        const display = document.getElementById('display-legenda');
+        
+        // No iOS, precisamos garantir que o track seja carregado corretamente
+        audio.addEventListener('play', () => {
+            const track = audio.textTracks[0];
+            track.mode = 'hidden';
+
+            track.oncuechange = function() {
+                if (this.activeCues && this.activeCues.length > 0) {
+                    display.innerText = this.activeCues[0].text;
+                }
+            };
+        });
+    </script>
+</body>
+</html>
